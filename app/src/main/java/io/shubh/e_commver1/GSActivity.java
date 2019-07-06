@@ -1,4 +1,4 @@
-package com.mao.werp;
+package io.shubh.e_commver1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
