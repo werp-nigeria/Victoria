@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1031952812605-bq8o5ge87as07n6tjbp0p9eueheiv74l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.shubh.e_commver1",
+            "certificate_hash": "317d91ca1c72e1e225e7e69b837b4bc6de911823"
+          }
+        },
+        {
           "client_id": "1031952812605-gs3v7e72jm8gdrn26erck4476ipcdjbf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
