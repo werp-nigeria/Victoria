@@ -25,6 +25,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private String TAG = "WelcomeActivity";
     private FirebaseAuth mAuth;
+    // Access a Cloud Firestore instance from your Activity
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,12 +18,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -33,11 +43,14 @@ public class SignupActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     private String TAG="LoginActivity";
     private FirebaseAuth mAuth;
+    FirebaseFirestore db ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        db = FirebaseFirestore.getInstance();
 
         signIn=(SignInButton)findViewById(R.id.sign_in_button_2);
         signout=findViewById(R.id.sign_out);
@@ -102,6 +115,10 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
+                            push_the_uid_to_users_node();
+
+
+
                             Intent in = new Intent(SignupActivity.this, MainActivity.class);
                             startActivity(in);
                         } else {
@@ -130,6 +147,70 @@ public class SignupActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
             Toast.makeText(this,"Name of the user :"+personName+"user id is :"+personId,Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+
+
+    private void push_the_uid_to_users_node() {
+
+        //this function is executed each time user logsin  but data can only be pushed only once and that is the first time user logs in
+
+
+
+
+
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<String> users_list = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                        users_list.add(document.getId());
+                    }
+
+
+                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+                    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+                    // Create a new user with a first and last name
+
+
+                    if(!users_list.contains(currentFirebaseUser.getUid())) {
+
+                        Map<String, Object> user_node_data = new HashMap<>();
+                        user_node_data.put("uid", currentFirebaseUser.getUid());
+                        user_node_data.put("name", acct.getDisplayName());
+                        user_node_data.put("email", acct.getEmail());
+                        //below value is false by default
+                        user_node_data.put("is a seller also ?", false);
+
+                        db.collection("users").document(currentFirebaseUser.getUid())
+                                .set(user_node_data)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
+                    }
+
+
+                    Log.d(TAG, users_list.toString());
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
 
     }
 }
