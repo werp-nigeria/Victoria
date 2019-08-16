@@ -22,13 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Buyer_confirmation_activity extends AppCompatActivity {
+public class seller_confirmation_activity extends AppCompatActivity {
 
     FirebaseFirestore db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buyer_confirmation_activity);
+        setContentView(R.layout.activity_seller_confirmation_activity);
 
         db = FirebaseFirestore.getInstance();
         final EditText et_fr_phnno = (EditText)findViewById(R.id.id_fr_et_phn_no);
@@ -53,15 +53,15 @@ public class Buyer_confirmation_activity extends AppCompatActivity {
 
 
                         Map<String, Object> user_node_data = new HashMap<>();
-                    //    user_node_data.put("uid", currentFirebaseUser.getUid());
-                 //       user_node_data.put("name", acct.getDisplayName());
-                //        user_node_data.put("email", acct.getEmail());
-                        //below value is false by default
-                        user_node_data.put("is a seller also ?", true);
-                    user_node_data.put("phone no", no);
+
+                    user_node_data.put("is a seller also ?", true);
+                     user_node_data.put("phone no", no);
 
                         db.collection("users").document(currentFirebaseUser.getUid())
-                                .set(user_node_data)
+                                /* When you call set() on a document, the existing contents of that documents are replaced with the data you pass in.
+                                If you want to only update the values of the field you specify in a map, use update():*/
+                                // thats why this code is not used    ===================>  .set(user_node_data)
+                                .update(user_node_data)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -80,13 +80,13 @@ public class Buyer_confirmation_activity extends AppCompatActivity {
 
 
 
-                    Intent in = new Intent(Buyer_confirmation_activity.this, Buyer_items_list.class);
+                    Intent in = new Intent(seller_confirmation_activity.this, seller_items_list.class);
                     startActivity(in);
 
 
                 }else{
 
-                    Toast.makeText(Buyer_confirmation_activity.this, "enter valid no", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(seller_confirmation_activity.this, "enter valid no", Toast.LENGTH_SHORT).show();
                 }
             }
         });

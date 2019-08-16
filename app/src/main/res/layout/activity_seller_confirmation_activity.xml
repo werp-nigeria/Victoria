@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Buyer_confirmation_activity">
+    tools:context=".seller_confirmation_activity">
 
     <EditText
         android:id="@+id/id_fr_et_phn_no"

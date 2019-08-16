@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".seller_items_list">
+
+    <TextView
+        android:id="@+id/top_banner"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:fontFamily="serif"
+        android:text=" List of your items UP for sale "
+        android:textColor="#6423dc"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/card_recycler_view_seller_items_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   android:layout_below="@+id/top_banner"
+    android:paddingBottom="5dp"/>
+
+    <Button
+        android:id="@+id/id_fr_bt_add_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add item "
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
